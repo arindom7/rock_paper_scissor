@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        background-color: green;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        font-size: 15px;
+        padding: 20px 40px;
+        display: flex;
+        height: auto;
+        width: auto;
+        align-items: center;
+        flex-direction: column;
+
+    }
+    h1{
+        font-weight: 500;
+        color: red;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    #scoreboard{
+        display: flex;
+        gap: 60px;
+        background-color: white;
+        box-shadow: 2px 3px 1px 2px rgb(37, 28, 28);
+        margin-bottom: 30px;
+    }
+    .score{
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+    }
+    #choices{
+        display: flex;
+        gap:  20px;
+        margin-bottom: 40px;
+    }
+    #choices img{
+        display: flex;
+        height: 200px;
+        width: 200px;
+        object-fit: contain;
+        cursor: pointer;
+        border-radius: 50%;
+        background-color: #f60303;
+        padding: 18px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    #choices img:hover{
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    .result{
+        background-color: pink;
+        padding: 24px 20px;
+        border-radius: 10%;
+
+    }
+    #result-message{
+        font-weight: 800;
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+    #result.win {
+  border-left: 5px solid #48bb78;
+}
+
+#result.lose {
+  border-left: 5px solid #fc8181;
+}
+
+#result.draw {
+  border-left: 5px solid #f6ad55;
+}
+</style>
+<body>
+    <h1>rock paper scissor</h1>
+    <div id="scoreboard">
+        <div class="score">
+            <span>you</span>
+            <span id="player-score">0</span>
+        </div>
+        <div class="score">
+            <span>computer</span>
+            <span id="computer-score">0</span>
+        </div>
+    </div>
+
+    <div id="choices">
+        <img src="rock.png" alt="rock">
+        <img src="paper.png" alt="paper">
+        <img src="scissors.png" alt="scissors">
+
+    </div>
+    <div class="result">
+        <p id="result-message">pick your choice</p>
+        <p id="computer-choice-display"></p>
+    </div>
+</body>
+<script>
+    // ===== STEP 1: SELECT ALL ELEMENTS =====
+const images = document.querySelectorAll("#choices img");
+const resultMessage = document.getElementById("result-message");
+const computerChoiceDisplay = document.getElementById("computer-choice-display");
+const playerScoreDisplay = document.getElementById("player-score");
+const computerScoreDisplay = document.getElementById("computer-score");
+
+
+let playerScore = 0;
+let computerScore = 0;
+
+images.forEach(function(image) {
+  image.addEventListener("click", function() {
+    const playerChoice = image.alt.toLowerCase(); 
+    playRound(playerChoice);
+  });
+})
+function getComputerChoice() {
+  const choices = ["rock", "paper", "scissors"];
+  const randomIndex = Math.floor(Math.random() * 3);
+  return choices[randomIndex];
+}
+function determineWinner(player, computer) {
+  if (player === computer) {
+    return "draw";
+  }
+  if (
+    (player === "rock"     && computer === "scissors") ||
+    (player === "paper"    && computer === "rock")     ||
+    (player === "scissors" && computer === "paper")
+  ) {
+    return "win";
+  }
+  return "lose";
+}
+
+function playRound(playerChoice) {
+  const computerChoice = getComputerChoice();
+  const result = determineWinner(playerChoice, computerChoice);
+  computerChoiceDisplay.innerText = "Computer chose: " + computerChoice;
+  resultMessage.className = ""; 
+
+  if (result === "win") {
+    resultMessage.innerText = "You Win! ✅";
+    resultMessage.className = "win";
+    playerScore++;
+    playerScoreDisplay.innerText = playerScore
+
+  } else if (result === "lose") {
+    resultMessage.innerText = "You Lose! ❌";
+    resultMessage.className = "lose";
+    computerScore++;
+    computerScoreDisplay.innerText = computerScore;
+
+  } else {
+    resultMessage.innerText = "It's a Draw! 🤝";
+    resultMessage.className = "draw";
+  }
+}
+</script>
+</html>
